@@ -1,5 +1,5 @@
 [build]
-  command = "npm i --verbose && strip --strip-debug ./node_modules/couchbase/build/Release/couchbase_impl.node"
+  command = "npm i --verbose && find ./node_modules/@couchbase -name '*.node' -exec strip --strip-debug {} +"
   publish = "."
   
   [template.environment]
