@@ -1,21 +1,4 @@
-const couchbase = require("couchbase");
-require("dotenv").config();
-
-const ENDPOINT = process.env.COUCHBASE_ENDPOINT;
-const USERNAME = process.env.COUCHBASE_USERNAME;
-const PASSWORD = process.env.COUCHBASE_PASSWORD;
-const BUCKET = process.env.COUCHBASE_BUCKET;
-
-const couchbaseClientPromise = couchbase.connect(
-  "couchbases://" + ENDPOINT,
-  {
-    username: USERNAME,
-    password: PASSWORD,
-    timeouts: {
-      kvTimeout: 10000, // milliseconds
-    },
-  }
-);
+const { getScope } = require("../../lib/couchbase");
 
 const handler = async (event) => {
   // only allow PUT requests
@@ -26,9 +9,7 @@ const handler = async (event) => {
   }
 
   try {
-    const cluster = await couchbaseClientPromise;
-    const bucket = cluster.bucket(BUCKET);
-    const scope = bucket.scope("inventory");
+    const scope = await getScope("inventory");
     const collection = scope.collection("airline");
 
     const modifiedAirline = {
